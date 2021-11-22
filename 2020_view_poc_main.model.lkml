@@ -18,3 +18,10 @@ explore: rental {
   }
 
 }
+
+explore: all_film_fact {
+  join: rented_film_fact {
+    relationship: one_to_one
+    sql_on: ${all_film_fact.film_id} = ${rented_film_fact.film_id} ;;
+  }
+}

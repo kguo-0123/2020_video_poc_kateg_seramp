@@ -76,13 +76,11 @@ view: payment {
 
   measure: total_amount {
     type: sum
-    hidden: yes
     sql: ${amount} ;;
   }
 
   measure: average_amount {
     type: average
-    hidden: yes
     sql: ${amount} ;;
   }
 }

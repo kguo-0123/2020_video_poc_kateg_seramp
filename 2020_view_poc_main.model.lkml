@@ -16,4 +16,5 @@ explore: rental {
     relationship: one_to_one
     sql_on: ${rental.rental_id} = ${payment.rental_id} ;;
   }
+
 }

@@ -143,11 +143,21 @@ view: rental {
   }
 
 # About next rental ##
+  dimension:  has_next_rental{
+    type: yesno
+    sql: ${order_sequence_next.rental_id} is not null ;;
+  }
+
   dimension_group: till_next_rental {
     type: duration
     intervals: [day]
     sql_start: ${rental_date} ;;
     sql_end: ${order_sequence_next.rental_date} ;;
+  }
+
+  dimension: days_till_next_rental_nullfilled {
+    type: number
+    sql: coalesce(${days_till_next_rental}, 99999) ;;
   }
 
   dimension: repeat_rental_within_30_days {
@@ -198,4 +208,6 @@ view: rental {
 set: rental_details {
   fields: [rental_id,rental_date,return_date]
 }
+
+
 }

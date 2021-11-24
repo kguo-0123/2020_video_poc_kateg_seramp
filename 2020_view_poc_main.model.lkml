@@ -34,7 +34,7 @@ explore: rental {
   join: order_sequence_current {
     from: order_sequence
     relationship: one_to_one
-    sql_on: ${rental.rental_id} = ${order_sequence_current.rental_id};;
+    sql_on: ${rental.rental_id} = ${order_sequence_current.rental_id} ;;
   }
   join: order_sequence_next {
     from: order_sequence

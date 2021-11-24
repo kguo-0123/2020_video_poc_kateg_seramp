@@ -77,6 +77,7 @@ view: payment {
   measure: total_amount {
     type: sum
     sql: ${amount} ;;
+    value_format_name: "usd"
   }
 
   measure: average_amount {

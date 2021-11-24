@@ -53,7 +53,7 @@ view: customer_fact {
   }
   measure: average_late_rental_rate {
     type: average
-    label: "Average Lifetime Late rental rate"
+    label: "Average Lifetime Late Rental Rate"
     sql: ${late_rental_rate} ;;
     value_format_name: percent_2
   }

@@ -7,10 +7,12 @@ explore: rental {
   join: inventory{
     relationship: many_to_one
     sql_on: ${rental.inventory_id} = ${inventory.inventory_id} ;;
+    type: full_outer
   }
   join: store {
     relationship: many_to_one
     sql_on: ${inventory.store_id} = ${store.store_id} ;;
+    type: full_outer
   }
   join: payment {
     relationship: one_to_one
@@ -27,6 +29,7 @@ explore: rental {
   join: customer {
     relationship: many_to_one
     sql_on: ${rental.customer_id} = ${customer.customer_id} ;;
+    type: full_outer
   }
   join: order_sequence_current {
     from: order_sequence
@@ -45,6 +48,7 @@ explore: rental {
   join: film {
     relationship: many_to_one
     sql_on: ${inventory.film_id} = ${film.film_id} ;;
+    type: full_outer
   }
     join: language {
       view_label: "Film"
@@ -56,6 +60,7 @@ explore: rental {
     relationship: many_to_one
     sql_on: ${inventory.film_id} = ${film_category.film_id} ;;
     fields: []
+    type: full_outer
   }
       join: category {
         view_label: "Film"
@@ -75,13 +80,13 @@ explore: rental {
         fields: [actor.name]
       }
 
-
-
-}
-
-explore: all_film_fact {
-  join: rented_film_fact {
-    relationship: one_to_one
-    sql_on: ${all_film_fact.film_id} = ${rented_film_fact.film_id} ;;
+  join: film_store_fact {
+    relationship: many_to_one
+    sql_on: ${calendar.date_x_date} = ${film_store_fact.date_x_date}
+    and ${film.film_id} = ${film_store_fact.film_id} and ${store.store_id} = ${film_store_fact.store_id};;
+    type: full_outer
   }
+
 }
+
+explore: film_store_fact {}

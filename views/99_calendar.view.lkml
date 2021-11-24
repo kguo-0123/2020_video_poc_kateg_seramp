@@ -6,7 +6,7 @@ view: calendar {
     sql: SELECT
           *
           FROM
-          UNNEST(GENERATE_TIMESTAMP_ARRAY('2005-05-24', '2006-02-14', INTERVAL 1 DAY)) as DATE_x
+          UNNEST(GENERATE_TIMESTAMP_ARRAY('2005-05-24', '2006-02-28', INTERVAL 1 DAY)) as DATE_x
       ;;
       sql_trigger_value: select 1  ;;
   }

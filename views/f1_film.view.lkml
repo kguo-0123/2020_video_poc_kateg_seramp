@@ -49,6 +49,13 @@ view: film {
     type: number
     sql: ${TABLE}.length ;;
   }
+  dimension: length_tier{
+    type: string
+    sql: case
+    when ${length} <= 60 then 'Short'
+    when ${length} <= 120 then 'Medium'
+    else 'Long' end;;
+  }
 
   dimension: original_language_id {
     type: string
@@ -85,6 +92,7 @@ view: film {
     type: number
     sql: ${TABLE}.rental_rate ;;
   }
+
 
   dimension: replacement_cost {
     type: number

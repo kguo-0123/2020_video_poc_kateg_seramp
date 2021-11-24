@@ -142,7 +142,6 @@ view: rental {
     view_label: "as of X"
   }
 
-
 # About next rental ##
   dimension_group: till_next_rental {
     type: duration

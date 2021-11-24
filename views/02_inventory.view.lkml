@@ -14,17 +14,11 @@ view: inventory {
     sql: ${TABLE}.inventory_id ;;
   }
 
-  # Here's what a typical dimension looks like in LookML.
-  # A dimension is a groupable field that can be used to filter query results.
-  # This dimension will be called "Film ID" in Explore.
-
   dimension: film_id {
     type: number
     sql: ${TABLE}.film_id ;;
   }
 
-  # Dates and timestamps can be represented in Looker using a dimension group of type: time.
-  # Looker converts dates and timestamps to the specified timeframes within the dimension group.
 
   dimension_group: last_update {
     type: time
@@ -38,6 +32,7 @@ view: inventory {
       year
     ]
     sql: ${TABLE}.last_update ;;
+    hidden: yes
   }
 
   dimension: store_id {
@@ -46,15 +41,31 @@ view: inventory {
     sql: ${TABLE}.store_id ;;
   }
 
-  # A measure is a field that uses a SQL aggregate function. Here are count, sum, and average
-  # measures for numeric dimensions, but you can also add measures of many different types.
-  # Click on the type parameter to see all the options in the Quick Help panel on the right.
-
   measure: count {
     type: count
-    drill_fields: [inventory_id, store.store_id, rental.count]
+    label: "Total Inventory Count"
   }
-}
 
-# These sum and average measures are hidden by default.
-# If you want them to show up in your explore, remove hidden: yes.
+  measure: count_of_rented_as_of_x {
+    type: count
+    filters: [rental.is_rented_as_of_x: "Yes"]
+    label: "Total Inventory Rented Count as of X"
+    view_label: "as of X"
+  }
+
+  measure: rental_rate {
+    type: number
+    sql: 1.0*${count_of_rented_as_of_x} / nullif(${count},0);;
+    value_format_name: percent_2
+    view_label: "as of X"
+  }
+
+  measure: OOS_flag_2 {
+    type: number
+    sql: case when 1.0*${count_of_rented_as_of_x} / nullif(${count},0) >= 1 then '1' else '0' end;;
+    view_label: "as of X"
+  }
+
+
+
+}

@@ -45,6 +45,22 @@ view: customer {
     sql: ${TABLE}.create_date ;;
   }
 
+  # to be removed!
+  dimension_group: create_dummy_data {
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: DATETIME_ADD(DATETIME "2003-01-01 00:00:00", INTERVAL ${customer_id} DAY) ;;
+  }
+
+
   dimension: email {
     type: string
     sql: ${TABLE}.email ;;
@@ -79,6 +95,7 @@ view: customer {
     # hidden: yes
     sql: ${TABLE}.store_id ;;
   }
+
 
   # A measure is a field that uses a SQL aggregate function. Here are count, sum, and average
   # measures for numeric dimensions, but you can also add measures of many different types.

@@ -33,7 +33,7 @@ view: rental {
     sql: ${TABLE}.staff_id ;;
   }
 
-
+  # Date ###################
   dimension_group: last_update {
     type: time
     timeframes: [
@@ -76,10 +76,6 @@ view: rental {
     sql: ${TABLE}.return_date ;;
   }
 
-  dimension: is_returned {
-    type: yesno
-    sql: ${return_raw} is not null ;;
-  }
 
 # About Rental #####################
 
@@ -88,10 +84,66 @@ view: rental {
     sql_start: ${rental_raw} ;;
     sql_end: case when ${return_raw} is null then current_timestamp() else ${return_raw} end ;;
   }
-  dimension: is_late {
+
+  dimension: is_late_as_of_today {
     type: yesno
     sql: ${days_rental_duration} > 7  ;;
   }
+
+  dimension: is_returned_as_of_today{
+    type: yesno
+    sql: ${return_raw} is not null ;;
+  }
+
+  # As of X (reference dat) -- used for snapshot analysis
+
+  dimension: is_rented_as_of_x{
+    type: yesno
+    sql: ${calendar.date_x_date} between ${rental_date} and COALESCE(${return_date}, current_date());;
+    view_label: "as of X"
+  }
+
+  dimension: rental_duration_as_of_x{
+    type: number
+    sql:
+      case
+        when ${is_rented_as_of_x} is false then null
+        else TIMESTAMP_DIFF(${calendar.date_x_date},${rental_date},day)
+        end;;
+    view_label: "as of X"
+  }
+
+  dimension: is_late_as_x {
+    type: yesno
+    sql: ${rental_duration_as_of_x} > 7  ;;
+    view_label: "as of X"
+  }
+
+  measure: count_of_rentals_as_of_x {
+    type: count_distinct
+    sql: ${rental_id} ;;
+    filters: [is_rented_as_of_x: "yes"]
+    view_label: "as of X"
+    drill_fields: [rental_details*]
+  }
+
+  measure: count_of_late_rentals_as_of_x {
+    type: count_distinct
+    sql: ${rental_id} ;;
+    filters: [is_late_as_x: "yes"]
+    view_label: "as of X"
+    drill_fields: [rental_details*]
+  }
+
+  measure: late_rental_rate_as_of_x {
+    type: number
+    value_format_name  : "percent_2"
+    sql: 1.0*${count_of_late_rentals_as_of_x}/nullif(${count_of_rentals_as_of_x},0) ;;
+    view_label: "as of X"
+  }
+
+
+# About next rental ##
 
 
 # Measures ##########################
@@ -103,7 +155,7 @@ view: rental {
 
   measure: count_of_late_rentals {
     type: count
-    filters: [is_late: "Yes"]
+    filters: [is_late_as_of_today:  "Yes"]
   }
 
   measure: late_rental_rate {
@@ -114,4 +166,8 @@ view: rental {
     description: "Percentage of late rental"
     drill_fields: [count, count_of_late_rentals]
   }
+
+set: rental_details {
+  fields: [rental_id,rental_date,return_date]
+}
 }

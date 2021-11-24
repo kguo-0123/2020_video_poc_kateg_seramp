@@ -5,6 +5,7 @@ view: rented_film_fact {
         count(*) as films
         FROM inventory
         LEFT JOIN rental on rental.inventory_id = inventory.inventory_id
+        CROSS JOIN
         WHERE rental.return_date is NULL
         group by 1
        ;;

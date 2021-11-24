@@ -8,14 +8,11 @@ view: order_sequence {
     from video_store.rental   ;;
   }
 
-  measure: count {
-    type: count
-    drill_fields: [detail*]
-  }
 
   dimension: rental_id {
     type: number
     sql: ${TABLE}.rental_id ;;
+    primary_key: yes
   }
 
   dimension: customer_id {
@@ -28,13 +25,11 @@ view: order_sequence {
     sql: ${TABLE}.rental_seq ;;
   }
 
-  dimension_group: rental_date {
+  dimension_group: rental {
     type: time
     timeframes: [date]
     sql: ${TABLE}.rental_date ;;
   }
 
-  set: detail {
-    fields: [rental_id, customer_id, rental_seq]
-  }
+
 }

@@ -36,7 +36,7 @@ view: customer_fact {
   }
   dimension: average_amount {
     type: number
-    label: "Lifetime average Spend"
+    label: "Lifetime Average Spend"
   }
 
   measure: average_count {

@@ -144,7 +144,31 @@ view: rental {
 
 
 # About next rental ##
+  dimension_group: till_next_rental {
+    type: duration
+    intervals: [day]
+    sql_start: ${rental_date} ;;
+    sql_end: ${order_sequence_next.rental_date} ;;
+  }
 
+  dimension: repeat_rental_within_30_days {
+    type: yesno
+    sql: ${days_till_next_rental} <= 30 ;;
+  }
+  dimension: repeat_rental_within_60_days {
+    type: yesno
+    sql: ${days_till_next_rental} <= 60 ;;
+  }
+
+  dimension: repeat_rental_within_90_days {
+    type: yesno
+    sql: ${days_till_next_rental} <= 90 ;;
+  }
+
+  measure: average_days_till_next_rental {
+    type: average
+    sql: ${days_till_next_rental} ;;
+  }
 
 # Measures ##########################
 
@@ -165,6 +189,11 @@ view: rental {
     value_format_name: percent_2
     description: "Percentage of late rental"
     drill_fields: [count, count_of_late_rentals]
+  }
+
+  measure: count_of_customers {
+    type: count_distinct
+    sql: ${customer_id} ;;
   }
 
 set: rental_details {

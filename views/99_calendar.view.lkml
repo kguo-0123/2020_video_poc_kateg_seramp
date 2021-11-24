@@ -17,6 +17,14 @@ view: calendar {
     type: time
     timeframes: [date]
     sql: ${TABLE}.DATE_x ;;
+
+  }
+  dimension: created_pk {
+    type: string
+    hidden: yes
+    primary_key: yes
+    sql: ${date_x_date} ;;
+
   }
 
 

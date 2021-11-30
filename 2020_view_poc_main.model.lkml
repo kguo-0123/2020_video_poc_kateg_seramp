@@ -33,11 +33,13 @@ explore: rental {
   }
   join: order_sequence_current {
     from: order_sequence
+    view_label: "Sequence Analysis"
     relationship: one_to_one
     sql_on: ${rental.rental_id} = ${order_sequence_current.rental_id} ;;
   }
   join: order_sequence_next {
     from: order_sequence
+    view_label: "Sequence Analysis"
     relationship: one_to_one
     sql_on: ${order_sequence_current.customer_id} = ${order_sequence_next.customer_id}
     and ${order_sequence_current.rental_seq} +1 = ${order_sequence_next.rental_seq};;
@@ -85,8 +87,15 @@ explore: rental {
     sql_on: ${calendar.date_x_date} = ${film_store_fact.date_x_date}
     and ${film.film_id} = ${film_store_fact.film_id} and ${store.store_id} = ${film_store_fact.store_id};;
     type: full_outer
+
   }
+
+  # access_filter:  {
+  #   field: inventory.store_id
+  #   user_attribute: kg_test_store
+  # }
+
 
 }
 
-explore: film_store_fact {}
+#explore: film_store_fact {}

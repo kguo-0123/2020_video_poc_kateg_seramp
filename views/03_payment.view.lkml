@@ -4,7 +4,7 @@ view: payment {
   # to be used for all fields in this view.
   sql_table_name: `looker-private-demo.video_store.payment`
     ;;
-  drill_fields: [payment_id]
+ # drill_fields: [payment_id]
   # This primary key is the unique key for this table in the underlying database.
   # You need to define a primary key in a view in order to join to other views.
 
@@ -78,6 +78,7 @@ view: payment {
     type: sum
     sql: ${amount} ;;
     value_format_name: "usd"
+    drill_fields: [rental_id,total_amount]
   }
 
   measure: average_amount {

@@ -2,6 +2,7 @@
 # include: "2020_view_poc_main.model.lkml"
 
 view: customer_fact {
+  view_label: "Customer"
   derived_table: {
     explore_source: rental {
       column: customer_id {}
@@ -11,6 +12,9 @@ view: customer_fact {
       column: total_amount { field: payment.total_amount }
       column: average_amount { field: payment.average_amount }
     }
+    ##persist_for: "24 hours"
+    ##datagroup_trigger:
+
   }
   dimension: customer_id {
     type: number

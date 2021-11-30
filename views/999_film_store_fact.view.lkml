@@ -34,6 +34,10 @@ view: film_store_fact {
   }
   dimension: store_id {
     type: number
+    link: {
+      label: "Store {{ value }} Customer Behavior Dashboard"
+      url: "https://seramp.dev.looker.com/dashboards-next/40?Lifetime+Rental+Sequence+%28N%29=1&Store+ID={{ value }}"
+    }
   }
 
   dimension: rented_percentage  {

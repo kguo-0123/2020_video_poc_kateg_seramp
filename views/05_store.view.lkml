@@ -4,7 +4,7 @@ view: store {
   # to be used for all fields in this view.
   sql_table_name: `looker-private-demo.video_store.store`
     ;;
-  drill_fields: [store_id]
+  #drill_fields: [store_id]
   # This primary key is the unique key for this table in the underlying database.
   # You need to define a primary key in a view in order to join to other views.
 
@@ -12,6 +12,10 @@ view: store {
     primary_key: yes
     type: number
     sql: ${TABLE}.store_id ;;
+    link: {
+      label: "Store {{ value }} Customer Behavior Dashboard"
+      url: "https://seramp.dev.looker.com/dashboards-next/40?Lifetime+Rental+Sequence+%28N%29=1&Store+ID={{ value }}"
+    }
   }
 
   # Here's what a typical dimension looks like in LookML.

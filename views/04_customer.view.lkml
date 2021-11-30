@@ -4,7 +4,7 @@ view: customer {
   # to be used for all fields in this view.
   sql_table_name: `looker-private-demo.video_store.customer`
     ;;
-  drill_fields: [customer_id]
+  #drill_fields: [customer_id]
   # This primary key is the unique key for this table in the underlying database.
   # You need to define a primary key in a view in order to join to other views.
 
@@ -64,6 +64,33 @@ view: customer {
   dimension: email {
     type: string
     sql: ${TABLE}.email ;;
+    action: {
+      label: "Send Return Reminder E-mail"
+      url: "https://hooks.zapier.com/illustrative"
+      icon_url: "https://www.google.com/s2/favicons?domain=www.mailchimp.com"
+      form_param: {
+        name: "Customer ID"
+        type: string
+        default: "{{ customer_id._value }}"
+      }
+      form_param: {
+        name: "Customer ID"
+        type: string
+        default: "{{ email._value }}"
+      }
+
+      form_param: {
+        name: "Subject"
+        type: string
+        default: "Reminder: Your Rental Return is Due"
+      }
+
+      form_param: {
+        name: "Body"
+        type: string
+        default: " Hi {{ full_name._value }}, thanks for choosing 2020 Video! This is a friendly reminder that your current rental is due for return."
+      }
+    }
   }
 
   dimension: first_name {
@@ -74,6 +101,12 @@ view: customer {
   dimension: last_name {
     type: string
     sql: ${TABLE}.last_name ;;
+  }
+
+  dimension: full_name {
+    label: "Name"
+    type: string
+    sql: concat(${first_name},' ',${last_name}) ;;
   }
 
   dimension_group: last_update {
@@ -94,6 +127,10 @@ view: customer {
     type: number
     # hidden: yes
     sql: ${TABLE}.store_id ;;
+    link: {
+      label: "Store {{ value }} Customer Behavior Dashboard"
+      url: "https://seramp.dev.looker.com/dashboards-next/40?Lifetime+Rental+Sequence+%28N%29=23&Store+ID={{ value }}"
+    }
   }
 
 

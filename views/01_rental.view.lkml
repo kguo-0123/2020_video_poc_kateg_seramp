@@ -88,11 +88,13 @@ view: rental {
   dimension: is_late_as_of_today {
     type: yesno
     sql: ${days_rental_duration} > 7  ;;
+    group_label: "Status"
   }
 
   dimension: is_returned_as_of_today{
     type: yesno
     sql: ${return_raw} is not null ;;
+    group_label: "Status"
   }
 
   # As of X (reference dat) -- used for snapshot analysis
@@ -147,6 +149,7 @@ view: rental {
   dimension:  has_next_rental{
     type: yesno
     sql: ${order_sequence_next.rental_id} is not null ;;
+    group_label: "Status"
   }
 
   dimension_group: till_next_rental {
@@ -154,26 +157,29 @@ view: rental {
     intervals: [day]
     sql_start: ${rental_date} ;;
     sql_end: ${order_sequence_next.rental_date} ;;
+    hidden: yes
   }
 
   dimension: days_till_next_rental_nullfilled {
+    label: "Days Till Next Rental "
     type: number
     sql: coalesce(${days_till_next_rental}, 99999) ;;
+    group_label: "Status"
   }
 
-  dimension: repeat_rental_within_30_days {
-    type: yesno
-    sql: ${days_till_next_rental} <= 30 ;;
-  }
-  dimension: repeat_rental_within_60_days {
-    type: yesno
-    sql: ${days_till_next_rental} <= 60 ;;
-  }
+  # dimension: repeat_rental_within_30_days {
+  #   type: yesno
+  #   sql: ${days_till_next_rental} <= 30 ;;
+  # }
+  # dimension: repeat_rental_within_60_days {
+  #   type: yesno
+  #   sql: ${days_till_next_rental} <= 60 ;;
+  # }
 
-  dimension: repeat_rental_within_90_days {
-    type: yesno
-    sql: ${days_till_next_rental} <= 90 ;;
-  }
+  # dimension: repeat_rental_within_90_days {
+  #   type: yesno
+  #   sql: ${days_till_next_rental} <= 90 ;;
+  # }
 
   measure: average_days_till_next_rental {
     type: average

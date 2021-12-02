@@ -35,9 +35,11 @@ explore: rental {
   }
   join: order_sequence_current {
     from: order_sequence
-    view_label: "Sequence Analysis"
+    #view_label: "Sequence Analysis"
     relationship: one_to_one
     sql_on: ${rental.rental_id} = ${order_sequence_current.rental_id} ;;
+    fields: [order_sequence_current.rental_seq]
+    view_label: "Rental"
   }
   join: order_sequence_next {
     from: order_sequence
@@ -45,6 +47,7 @@ explore: rental {
     relationship: one_to_one
     sql_on: ${order_sequence_current.customer_id} = ${order_sequence_next.customer_id}
     and ${order_sequence_current.rental_seq} +1 = ${order_sequence_next.rental_seq};;
+    fields: []
   }
 
   # additional info about film
@@ -89,6 +92,7 @@ explore: rental {
     sql_on: ${calendar.date_x_date} = ${film_store_fact.date_x_date}
     and ${film.film_id} = ${film_store_fact.film_id} and ${store.store_id} = ${film_store_fact.store_id};;
     type: full_outer
+    view_label: "OOS & Late Rental History"
 
   }
 

@@ -12,7 +12,7 @@ view: calendar {
   }
 
   dimension_group: date_x {
-    view_label: "as of X"
+    view_label: "OOS & Late Rental History"
     label: "date (x)"
     type: time
     timeframes: [date]

@@ -20,6 +20,7 @@ view: film_store_fact {
   dimension: date_x_date {
     label: "as of X date (x) Date"
     type: date
+    hidden: yes
   }
   dimension: film_id {
     type: number
@@ -35,12 +36,14 @@ view: film_store_fact {
     }
   }
   dimension: count_of_rented_as_of_x {
-    label: "as of X Total Inventory Rented Count as of X"
+    label: "Total Inventory Rented Count as of X"
     type: number
+    view_label: "OOS & Late Rental History"
   }
   dimension: count {
     label: "Inventory Total Inventory Count"
     type: number
+    hidden: yes
   }
   dimension: store_id {
     type: number
@@ -60,11 +63,13 @@ view: film_store_fact {
     type: average
     sql: ${rented_percentage} ;;
     value_format_name: percent_2
+    hidden: yes
   }
   measure: OOS_count {
     type: count
     filters: [rented_percentage: ">=1"]
     drill_fields: [store_id, film_id, film.title, OOS_count]
+    label: "OOS Count as of X"
   }
 
 }

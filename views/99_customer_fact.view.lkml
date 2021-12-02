@@ -35,7 +35,7 @@ view: customer_fact {
     description: "Percentage of Late rental"
     value_format: "#,##0.00%"
     type: number
-    label: "Lifetime Late rental rate"
+    label: "Lifetime Late Rental Rate"
     group_label: "Lifetime Value"
   }
   dimension: total_amount {

@@ -45,6 +45,7 @@ view: inventory {
       label: "Store {{ value }} Customer Behavior Dashboard"
       url: "https://seramp.dev.looker.com/dashboards-next/40?Lifetime+Rental+Sequence+%28N%29=1&Store+ID={{ value }}"
     }
+    view_label: "Rental"
   }
 
   measure: count {
@@ -57,20 +58,22 @@ view: inventory {
     type: count
     filters: [rental.is_rented_as_of_x: "Yes"]
     label: "Total Inventory Rented Count as of X"
-    view_label: "as of X"
+    view_label: "OOS & Late Rental History"
   }
 
   measure: rental_rate {
     type: number
     sql: 1.0*${count_of_rented_as_of_x} / nullif(${count},0);;
     value_format_name: percent_2
-    view_label: "as of X"
+    view_label: "OOS & Late Rental History"
+    label: "Rental Rate as of X"
   }
 
   measure: OOS_flag_2 {
+    hidden: yes
     type: number
     sql: case when 1.0*${count_of_rented_as_of_x} / nullif(${count},0) >= 1 then '1' else '0' end;;
-    view_label: "as of X"
+    view_label: "OOS & Late Rental History"
   }
 
 

@@ -46,6 +46,8 @@ view: rental {
       year
     ]
     sql: ${TABLE}.last_update ;;
+    hidden: yes
+
   }
 
   dimension_group: rental {
@@ -54,7 +56,8 @@ view: rental {
       date,
       week,
       month,
-      year
+      year,
+      raw
     ]
     sql: ${TABLE}.rental_date ;;
   }
@@ -63,11 +66,11 @@ view: rental {
     type: time
     timeframes: [
       raw,
-      time,
+
       date,
       week,
       month,
-      quarter,
+
       year
     ]
     sql: ${TABLE}.return_date ;;
@@ -78,8 +81,8 @@ view: rental {
 
   dimension_group: rental_duration {
     type: duration
-    sql_start: ${rental_date} ;;
-    sql_end: case when ${return_date} is null then current_timestamp() else ${return_date} end ;;
+    sql_start: ${rental_raw} ;;
+    sql_end: case when ${return_raw} is null then current_timestamp() else ${return_raw} end ;;
   }
 
   dimension: is_late_as_of_today {
@@ -97,7 +100,7 @@ view: rental {
   dimension: is_rented_as_of_x{
     type: yesno
     sql: ${calendar.date_x_date} between ${rental_date} and COALESCE(${return_date}, current_date());;
-    view_label: "as of X"
+    view_label: "OOS & Late Rental History"
   }
 
   dimension: rental_duration_as_of_x{
@@ -107,20 +110,20 @@ view: rental {
         when ${is_rented_as_of_x} is false then null
         else TIMESTAMP_DIFF(${calendar.date_x_date},${rental_date},day)
         end;;
-    view_label: "as of X"
+    view_label: "OOS & Late Rental History"
   }
 
   dimension: is_late_as_x {
     type: yesno
     sql: ${rental_duration_as_of_x} > 7  ;;
-    view_label: "as of X"
+    view_label: "OOS & Late Rental History"
   }
 
   measure: count_of_rentals_as_of_x {
     type: count_distinct
     sql: ${rental_id} ;;
     filters: [is_rented_as_of_x: "yes"]
-    view_label: "as of X"
+    view_label: "OOS & Late Rental History"
     drill_fields: [rental_details*]
   }
 
@@ -128,7 +131,7 @@ view: rental {
     type: count_distinct
     sql: ${rental_id} ;;
     filters: [is_late_as_x: "yes"]
-    view_label: "as of X"
+    view_label: "OOS & Late Rental History"
     drill_fields: [rental_details*]
   }
 
@@ -136,7 +139,7 @@ view: rental {
     type: number
     value_format_name  : "percent_2"
     sql: 1.0*${count_of_late_rentals_as_of_x}/nullif(${count_of_rentals_as_of_x},0) ;;
-    view_label: "as of X"
+    view_label: "OOS & Late Rental History"
     drill_fields: [inventory.store_id,late_rental_rate_as_of_x]
   }
 

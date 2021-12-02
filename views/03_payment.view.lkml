@@ -12,6 +12,7 @@ view: payment {
     primary_key: yes
     type: number
     sql: ${TABLE}.payment_id ;;
+    hidden: yes
   }
 
   # Here's what a typical dimension looks like in LookML.
@@ -21,11 +22,13 @@ view: payment {
   dimension: amount {
     type: number
     sql: ${TABLE}.amount ;;
+    hidden: yes
   }
 
   dimension: customer_id {
     type: number
     sql: ${TABLE}.customer_id ;;
+    hidden: yes
   }
 
   # Dates and timestamps can be represented in Looker using a dimension group of type: time.
@@ -43,17 +46,16 @@ view: payment {
       year
     ]
     sql: ${TABLE}.last_update ;;
+    hidden: yes
   }
 
   dimension_group: payment {
     type: time
     timeframes: [
       raw,
-      time,
       date,
       week,
       month,
-      quarter,
       year
     ]
     sql: ${TABLE}.payment_date ;;
@@ -62,16 +64,19 @@ view: payment {
   dimension: rental_id {
     type: number
     sql: ${TABLE}.rental_id ;;
+    hidden: yes
   }
 
   dimension: staff_id {
     type: number
     sql: ${TABLE}.staff_id ;;
+    hidden: yes
   }
 
   measure: count {
     type: count
     drill_fields: [payment_id]
+    hidden: yes
   }
 
   measure: total_amount {
@@ -79,10 +84,12 @@ view: payment {
     sql: ${amount} ;;
     value_format_name: "usd"
     drill_fields: [rental_id,total_amount]
+    label: "Total Revenue"
   }
 
   measure: average_amount {
     type: average
     sql: ${amount} ;;
+    hidden: yes
   }
 }

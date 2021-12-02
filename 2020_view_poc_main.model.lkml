@@ -4,6 +4,7 @@ include: "/views/*.view.lkml"                # include all views in the views/ f
 
 
 explore: rental {
+  sql_always_where: ${rental.rental_date} <= '2005-08-30' ;;
   join: inventory{
     relationship: many_to_one
     sql_on: ${rental.inventory_id} = ${inventory.inventory_id} ;;
@@ -17,6 +18,7 @@ explore: rental {
   join: payment {
     relationship: one_to_one
     sql_on: ${rental.rental_id} = ${payment.rental_id} ;;
+    view_label: "Revenue"
   }
   join: calendar {
     relationship: many_to_one

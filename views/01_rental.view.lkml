@@ -51,12 +51,9 @@ view: rental {
   dimension_group: rental {
     type: time
     timeframes: [
-      raw,
-      time,
       date,
       week,
       month,
-      quarter,
       year
     ]
     sql: ${TABLE}.rental_date ;;
@@ -81,8 +78,8 @@ view: rental {
 
   dimension_group: rental_duration {
     type: duration
-    sql_start: ${rental_raw} ;;
-    sql_end: case when ${return_raw} is null then current_timestamp() else ${return_raw} end ;;
+    sql_start: ${rental_date} ;;
+    sql_end: case when ${return_date} is null then current_timestamp() else ${return_date} end ;;
   }
 
   dimension: is_late_as_of_today {
@@ -140,6 +137,7 @@ view: rental {
     value_format_name  : "percent_2"
     sql: 1.0*${count_of_late_rentals_as_of_x}/nullif(${count_of_rentals_as_of_x},0) ;;
     view_label: "as of X"
+    drill_fields: [inventory.store_id,late_rental_rate_as_of_x]
   }
 
 # About next rental ##
@@ -199,6 +197,7 @@ view: rental {
     value_format_name: percent_2
     description: "Percentage of late rental"
     drill_fields: [count, count_of_late_rentals]
+    hidden: yes
   }
 
   measure: count_of_customers {

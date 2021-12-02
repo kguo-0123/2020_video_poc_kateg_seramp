@@ -23,6 +23,16 @@ view: film_store_fact {
   }
   dimension: film_id {
     type: number
+    action: {
+      label: "Send Restock Request to Inventory Team for Film {{ value }}"
+      url: "https://hooks.zapier.com/illustrative"
+     # icon_url: "https://www.google.com/s2/favicons?domain=www.mailchimp.com"
+      form_param: {
+        name: "Film ID"
+        type: string
+        default: "{{ film_id._value }}"
+      }
+    }
   }
   dimension: count_of_rented_as_of_x {
     label: "as of X Total Inventory Rented Count as of X"

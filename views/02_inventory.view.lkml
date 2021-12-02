@@ -12,11 +12,13 @@ view: inventory {
     primary_key: yes
     type: number
     sql: ${TABLE}.inventory_id ;;
+    hidden: yes
   }
 
   dimension: film_id {
     type: number
     sql: ${TABLE}.film_id ;;
+    hidden: yes
   }
 
 
@@ -37,7 +39,7 @@ view: inventory {
 
   dimension: store_id {
     type: number
-    # hidden: yes
+   # hidden: yes
     sql: ${TABLE}.store_id ;;
     link: {
       label: "Store {{ value }} Customer Behavior Dashboard"
@@ -48,6 +50,7 @@ view: inventory {
   measure: count {
     type: count
     label: "Total Inventory Count"
+    hidden: yes
   }
 
   measure: count_of_rented_as_of_x {

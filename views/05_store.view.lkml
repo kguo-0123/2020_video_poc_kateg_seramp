@@ -25,6 +25,7 @@ view: store {
   dimension: address_id {
     type: number
     sql: ${TABLE}.address_id ;;
+    hidden: yes
   }
 
   # Dates and timestamps can be represented in Looker using a dimension group of type: time.
@@ -42,6 +43,7 @@ view: store {
       year
     ]
     sql: ${TABLE}.last_update ;;
+    hidden: yes
   }
 
   dimension: manager_staff_id {
@@ -56,6 +58,7 @@ view: store {
   measure: count {
     type: count
     drill_fields: [store_id, inventory.count, customer.count]
+    hidden: yes
   }
 }
 

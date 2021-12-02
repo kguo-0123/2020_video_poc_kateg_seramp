@@ -21,11 +21,13 @@ view: customer {
   dimension: active {
     type: number
     sql: ${TABLE}.active ;;
+    hidden: yes
   }
 
   dimension: address_id {
     type: number
     sql: ${TABLE}.address_id ;;
+    hidden: yes
   }
 
   # Dates and timestamps can be represented in Looker using a dimension group of type: time.
@@ -43,18 +45,17 @@ view: customer {
       year
     ]
     sql: ${TABLE}.create_date ;;
+    hidden: yes
   }
 
   # to be removed!
   dimension_group: create_dummy_data {
+    label: "Sign-up Date"
     type: time
     timeframes: [
-      raw,
-      time,
       date,
       week,
       month,
-      quarter,
       year
     ]
     sql: DATETIME_ADD(DATETIME "2003-01-01 00:00:00", INTERVAL ${customer_id} DAY) ;;
@@ -63,7 +64,7 @@ view: customer {
 
   dimension: email {
     type: string
-    sql: ${TABLE}.email ;;
+    sql: concat(substring(${TABLE}.email,1,1),'*************@sakilacustomer.org');;
     action: {
       label: "Send Return Reminder E-mail"
       url: "https://hooks.zapier.com/illustrative"
@@ -74,7 +75,7 @@ view: customer {
         default: "{{ customer_id._value }}"
       }
       form_param: {
-        name: "Customer ID"
+        name: "Email (Masked)"
         type: string
         default: "{{ email._value }}"
       }
@@ -88,7 +89,7 @@ view: customer {
       form_param: {
         name: "Body"
         type: string
-        default: " Hi {{ full_name._value }}, thanks for choosing 2020 Video! This is a friendly reminder that your current rental is due for return."
+        default: " Hi {{ first_name._value }}, thanks for choosing 2020 Video! This is a friendly reminder that your current rental is due for return."
       }
     }
   }
@@ -96,11 +97,13 @@ view: customer {
   dimension: first_name {
     type: string
     sql: ${TABLE}.first_name ;;
+    hidden: yes
   }
 
   dimension: last_name {
     type: string
-    sql: ${TABLE}.last_name ;;
+    sql: concat(substring(${TABLE}.last_name,1,1), '*******') ;;
+    hidden: yes
   }
 
   dimension: full_name {
@@ -121,6 +124,7 @@ view: customer {
       year
     ]
     sql: ${TABLE}.last_update ;;
+    hidden: yes
   }
 
   dimension: store_id {
@@ -131,6 +135,7 @@ view: customer {
       label: "Store {{ value }} Customer Behavior Dashboard"
       url: "https://seramp.dev.looker.com/dashboards-next/40?Lifetime+Rental+Sequence+%28N%29=23&Store+ID={{ value }}"
     }
+    hidden: yes
   }
 
 

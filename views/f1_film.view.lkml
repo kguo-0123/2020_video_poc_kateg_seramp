@@ -69,13 +69,12 @@ view: film {
   }
 
   dimension_group: release_year {
+    label: "Release"
     type: time
     timeframes: [
-      raw,
       date,
       week,
       month,
-      quarter,
       year
     ]
     convert_tz: no
@@ -86,22 +85,26 @@ view: film {
   dimension: rental_duration {
     type: number
     sql: ${TABLE}.rental_duration ;;
+    hidden: yes
   }
 
   dimension: rental_rate {
     type: number
     sql: ${TABLE}.rental_rate ;;
+    hidden: yes
   }
 
 
   dimension: replacement_cost {
     type: number
     sql: ${TABLE}.replacement_cost ;;
+    hidden: yes
   }
 
   dimension: special_features {
     type: string
     sql: ${TABLE}.special_features ;;
+    hidden: yes
   }
 
   dimension: title {
